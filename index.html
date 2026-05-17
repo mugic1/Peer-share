@@ -2,552 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>PeerShare - Connect & Share</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #1e1e2f; padding: 20px; min-height: 100vh; }
-        .card { background: white; border-radius: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 20px 24px; transition: box-shadow 0.2s; }
-        .container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #1e88e5, #8e24aa); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .badge { background: #e8eaf6; padding: 6px 12px; border-radius: 40px; font-size: 0.8rem; font-weight: 500; color: #1e88e5; }
-        .grid-2col { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
-        @media (max-width: 880px) { .grid-2col { grid-template-columns: 1fr; gap: 20px; } }
-        .qr-section { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-        #qrcode { background: white; padding: 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: inline-block; }
-        .peer-id-box { background: #f0f2f5; border-radius: 48px; padding: 10px 20px; font-family: monospace; font-size: 0.9rem; word-break: break-all; text-align: center; width: 100%; }
-        .btn { border: none; background: #eef2ff; padding: 10px 20px; border-radius: 40px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease; font-family: inherit; font-size: 0.9rem; color: #1e1e2f; }
-        .btn-primary { background: #1e88e5; color: white; box-shadow: 0 2px 4px rgba(30,136,229,0.3); }
-        .btn-primary:hover { background: #0b5e9e; transform: translateY(-1px); }
-        .btn-outline { border: 1px solid #cdd9ed; background: white; }
-        .btn-outline:hover { background: #f5f7fc; }
-        .connection-status { background: #fef7e0; border-radius: 32px; padding: 8px 16px; font-size: 0.8rem; font-weight: 500; }
-        .chat-area { display: flex; flex-direction: column; height: 380px; }
-        .messages-list { flex: 1; overflow-y: auto; background: #fafcff; border-radius: 20px; padding: 16px; margin-bottom: 16px; border: 1px solid #eef2ff; }
-        .message { margin-bottom: 12px; padding: 8px 14px; border-radius: 20px; max-width: 85%; width: fit-content; word-break: break-word; }
-        .message-mine { background: #1e88e5; color: white; margin-left: auto; border-bottom-right-radius: 4px; }
-        .message-theirs { background: #e9ecef; color: #1e1e2f; border-bottom-left-radius: 4px; }
-        .file-item { background: #f8f9ff; border-radius: 16px; padding: 10px 12px; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e7ff; }
-        .file-name { font-size: 0.85rem; font-weight: 500; max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
-        .chip { background: #e8eaed; padding: 4px 10px; border-radius: 30px; font-size: 0.7rem; }
-        .scanner-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(6px); }
-        .scanner-card { background: white; border-radius: 32px; width: 90%; max-width: 500px; padding: 20px; }
-        .hidden { display: none; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .mt-3 { margin-top: 16px; }
-        .file-list-container { max-height: 200px; overflow-y: auto; }
-        hr { margin: 16px 0; border-color: #eef2ff; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .progress-text { font-size: 0.7rem; color: #1e88e5; margin-left: 8px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Chat & Transfer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-<div class="container">
-    <div class="top-bar">
-        <h1>📡 PeerShare · mesh chat</h1>
-        <div class="badge">PWA • Encrypted P2P</div>
+    <div class="app-bar">
+        <h1>P2P Connect</h1>
     </div>
 
-    <div class="grid-2col">
-        <div class="card">
-            <div class="flex-between">
-                <h3 style="font-weight: 600;">✨ Your profile</h3>
-                <span class="connection-status" id="connectionStatusText">⚪ Not connected</span>
+    <div class="container">
+        <!-- Connection Section -->
+        <div class="card connection-card">
+            <h3>Connect via QR</h3>
+            <div class="qr-section">
+                <div id="my-qr"></div>
+                <p>Tumhara ID: <strong id="my-id">Generating...</strong></p>
             </div>
-            <div class="qr-section mt-3">
-                <div id="qrcode"></div>
-                <div class="peer-id-box" id="peerIdDisplay">Loading...</div>
-                <button class="btn btn-outline" id="copyIdBtn"><span class="material-icons" style="font-size: 18px;">content_copy</span> Copy ID</button>
-                <div style="font-size: 0.7rem; color: #6c757d;">🔍 Let friend scan this QR to connect</div>
-            </div>
-            <hr>
-            <div>
-                <div class="flex-between">
-                    <span><span class="material-icons" style="font-size: 18px; vertical-align: middle;">qr_code_scanner</span> Connect to peer</span>
-                    <button class="btn btn-primary" id="openScannerBtn"><span class="material-icons">camera_alt</span> Scan QR</button>
-                </div>
-                <div class="mt-3" style="display: flex; gap: 8px;">
-                    <input type="text" id="manualPeerId" placeholder="Or paste peer ID" class="peer-id-box" style="flex:1; background: white; border:1px solid #cdd9ed;">
-                    <button class="btn btn-primary" id="connectManualBtn">Connect</button>
-                </div>
-            </div>
+            <button class="btn" id="start-scan-btn">Scan QR Code</button>
+            <div id="reader" style="display: none;"></div>
+            <p id="connection-status">Status: Disconnected</p>
         </div>
 
-        <div class="card">
-            <div class="flex-between">
-                <h3 style="font-weight: 600;">💬 Live session</h3>
-                <button class="btn btn-outline" id="disconnectBtn" disabled style="background:#ffe6e5;"><span class="material-icons">link_off</span> Disconnect</button>
+        <!-- Chat & File Section (Hidden till connected) -->
+        <div class="card chat-card" id="chat-section" style="display: none;">
+            <div class="chat-box" id="chat-box"></div>
+            
+            <div class="input-area">
+                <input type="text" id="msg-input" placeholder="Message likho...">
+                <button class="btn" id="send-msg-btn">Send</button>
             </div>
-            <div class="chat-area mt-3">
-                <div class="messages-list" id="messagesContainer">
-                    <div style="text-align:center; color:#aaa;">⚡ Waiting for connection...</div>
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="chatInput" placeholder="Type a message..." class="peer-id-box" style="flex:1; background: white;" disabled>
-                    <button class="btn btn-primary" id="sendChatBtn" disabled><span class="material-icons">send</span> Send</button>
-                </div>
-            </div>
+
             <hr>
-            <div>
-                <div class="flex-between">
-                    <span><span class="material-icons">attach_file</span> Send files (multiple)</span>
-                    <label class="btn btn-primary" style="cursor:pointer; background:#5e35b1;">
-                        <span class="material-icons">folder_open</span> Choose files
-                        <input type="file" id="fileInput" multiple style="display: none;">
-                    </label>
-                </div>
-                <div id="selectedFilesPreview" class="file-list-container" style="margin-top: 12px; font-size:0.8rem;"></div>
-                <button class="btn btn-primary" id="sendFilesBtn" disabled style="margin-top: 12px; background:#2e7d32;">📤 Send all files</button>
+
+            <div class="file-area">
+                <input type="file" id="file-input" multiple>
+                <button class="btn" id="send-file-btn">Send Files</button>
             </div>
-            <hr>
-            <div>
-                <div class="flex-between">
-                    <span><span class="material-icons">download</span> Received files</span>
-                    <button class="btn btn-outline" id="downloadAllBtn" disabled><span class="material-icons">archive</span> Download ALL (zip)</button>
-                </div>
-                <div id="receivedFilesList" class="file-list-container" style="margin-top: 12px; min-height: 70px;">
-                    <div style="color:#aaa;">No files yet</div>
-                </div>
-            </div>
+            
+            <div class="progress-area" id="progress-area"></div>
+        </div>
+
+        <!-- Received Files Section -->
+        <div class="card files-card" id="files-section" style="display: none;">
+            <h3>Received Files</h3>
+            <ul id="received-list"></ul>
+            <button class="btn btn-primary" id="download-all-btn">Download All (ZIP)</button>
         </div>
     </div>
-</div>
 
-<div id="scannerModal" class="scanner-modal hidden">
-    <div class="scanner-card">
-        <div class="flex-between">
-            <span style="font-weight:600;">📷 Scan peer QR</span>
-            <button class="btn btn-outline" id="closeScannerBtn" style="padding:6px 12px;">✕ Close</button>
-        </div>
-        <div id="qr-reader" style="width:100%; margin-top: 16px;"></div>
-        <p class="mt-3" style="font-size:0.8rem;">Align QR code from other device</p>
-    </div>
-</div>
-
-<script>
-    // -------------------- Global State --------------------
-    let myPeer = null;
-    let currentConn = null;
-    let myPeerId = null;
-    let connectionOpen = false;
-
-    // File transfer state: key = fileId, value = { metadata, chunks, receivedCount, totalChunks, progressCb? }
-    const receivingFiles = new Map();
-    let receivedFilesList = [];  // { name, blob, mime }
-
-    // DOM elements
-    const peerIdDisplay = document.getElementById('peerIdDisplay');
-    const qrContainer = document.getElementById('qrcode');
-    const connectionStatusSpan = document.getElementById('connectionStatusText');
-    const messagesDiv = document.getElementById('messagesContainer');
-    const chatInput = document.getElementById('chatInput');
-    const sendChatBtn = document.getElementById('sendChatBtn');
-    const fileInput = document.getElementById('fileInput');
-    const selectedFilesPreview = document.getElementById('selectedFilesPreview');
-    const sendFilesBtn = document.getElementById('sendFilesBtn');
-    const receivedFilesListDiv = document.getElementById('receivedFilesList');
-    const downloadAllBtn = document.getElementById('downloadAllBtn');
-    const disconnectBtn = document.getElementById('disconnectBtn');
-    const openScannerBtn = document.getElementById('openScannerBtn');
-    const manualPeerIdInput = document.getElementById('manualPeerId');
-    const connectManualBtn = document.getElementById('connectManualBtn');
-    const copyIdBtn = document.getElementById('copyIdBtn');
-    const scannerModal = document.getElementById('scannerModal');
-    const closeScannerBtn = document.getElementById('closeScannerBtn');
-
-    let html5QrCode = null;
-    let selectedFiles = [];
-
-    function updateConnectionUI(connected) {
-        connectionOpen = connected;
-        if (connected) {
-            connectionStatusSpan.innerHTML = '🟢 Connected • encrypted';
-            connectionStatusSpan.style.background = '#e0f2e9';
-            sendChatBtn.disabled = false;
-            chatInput.disabled = false;
-            sendFilesBtn.disabled = false;
-            disconnectBtn.disabled = false;
-            downloadAllBtn.disabled = false;
-        } else {
-            connectionStatusSpan.innerHTML = '⚪ Not connected';
-            connectionStatusSpan.style.background = '#fef7e0';
-            sendChatBtn.disabled = true;
-            chatInput.disabled = true;
-            sendFilesBtn.disabled = true;
-            disconnectBtn.disabled = true;
-            downloadAllBtn.disabled = true;
-            if (currentConn) {
-                try { currentConn.close(); } catch(e) {}
-                currentConn = null;
-            }
-        }
-    }
-
-    function addMessage(text, isMine) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${isMine ? 'message-mine' : 'message-theirs'}`;
-        msgDiv.textContent = text;
-        messagesDiv.appendChild(msgDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        if (messagesDiv.querySelector('div[style*="color:#aaa"]')) {
-            messagesDiv.innerHTML = '';
-            messagesDiv.appendChild(msgDiv);
-        }
-    }
-
-    function updateReceivedFilesUI() {
-        if (receivedFilesList.length === 0) {
-            receivedFilesListDiv.innerHTML = '<div style="color:#aaa;">No files yet</div>';
-            return;
-        }
-        receivedFilesListDiv.innerHTML = '';
-        receivedFilesList.forEach((file, idx) => {
-            const item = document.createElement('div');
-            item.className = 'file-item';
-            item.innerHTML = `
-                <div class="file-name">📄 ${file.name} (${(file.blob.size / 1024).toFixed(1)} KB)</div>
-                <button class="btn btn-outline download-single" data-idx="${idx}" style="padding:4px 12px;">⬇️ Download</button>
-            `;
-            receivedFilesListDiv.appendChild(item);
-        });
-        document.querySelectorAll('.download-single').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.idx);
-                const file = receivedFilesList[idx];
-                if (file) downloadBlob(file.blob, file.name);
-            });
-        });
-    }
-
-    function downloadBlob(blob, filename) {
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-
-    // handle all incoming data (binary & JSON)
-    function handleIncomingData(data) {
-        if (data instanceof ArrayBuffer) {
-            // binary chunk: header (8 bytes) + payload
-            if (data.byteLength < 8) return;
-            const view = new DataView(data);
-            const fileId = view.getUint32(0, true);
-            const chunkIndex = view.getUint32(4, true);
-            const chunkData = data.slice(8);
-            const rec = receivingFiles.get(fileId);
-            if (rec) {
-                if (!rec.chunks[chunkIndex]) {
-                    rec.chunks[chunkIndex] = chunkData;
-                    rec.receivedCount++;
-                    // update progress message if needed
-                    if (rec.receivedCount === rec.totalChunks) {
-                        const fullBlob = new Blob(rec.chunks, { type: rec.metadata.mimeType || 'application/octet-stream' });
-                        const fileEntry = {
-                            name: rec.metadata.name,
-                            blob: fullBlob,
-                            mime: rec.metadata.mimeType
-                        };
-                        receivedFilesList.push(fileEntry);
-                        updateReceivedFilesUI();
-                        addMessage(`✅ Received file: ${rec.metadata.name} (${(fullBlob.size/1024).toFixed(1)} KB)`, false);
-                        receivingFiles.delete(fileId);
-                    } else {
-                        // optional progress
-                        const percent = Math.floor((rec.receivedCount / rec.totalChunks) * 100);
-                        const progressMsg = `📥 Receiving "${rec.metadata.name}" (${percent}%)...`;
-                        // update last message (simple but effective)
-                        const lastMsg = messagesDiv.lastChild;
-                        if (lastMsg && lastMsg.textContent.includes(`Receiving "${rec.metadata.name}"`)) {
-                            lastMsg.textContent = progressMsg;
-                        }
-                    }
-                }
-            } else {
-                console.warn(`Chunk for unknown fileId ${fileId}, maybe metadata delayed - buffer not implemented but reordering unlikely`);
-            }
-            return;
-        }
-
-        // JSON messages
-        try {
-            const msg = JSON.parse(data);
-            if (msg.type === 'chat') {
-                addMessage(msg.text, false);
-            } else if (msg.type === 'file_meta') {
-                const { fileId, name, size, totalChunks, mimeType } = msg;
-                if (!receivingFiles.has(fileId)) {
-                    receivingFiles.set(fileId, {
-                        metadata: { name, size, mimeType, totalChunks },
-                        chunks: new Array(totalChunks),
-                        receivedCount: 0,
-                        totalChunks: totalChunks
-                    });
-                    addMessage(`⏳ Receiving "${name}" (${(size/1024).toFixed(1)} KB)...`, false);
-                }
-            }
-        } catch(e) { console.warn("Non-JSON or invalid data", e); }
-    }
-
-    function setupConnection(conn) {
-        if (currentConn && currentConn !== conn && currentConn.open) {
-            currentConn.close();
-        }
-        currentConn = conn;
-        conn.on('open', () => {
-            updateConnectionUI(true);
-            addMessage("🔗 Connection established! Start chatting & sharing files.", true);
-        });
-        conn.on('data', handleIncomingData);
-        conn.on('close', () => {
-            if (currentConn === conn) {
-                updateConnectionUI(false);
-                addMessage("⚠️ Connection closed by peer.", false);
-                currentConn = null;
-            }
-        });
-        conn.on('error', (err) => {
-            console.error(err);
-            if (currentConn === conn) updateConnectionUI(false);
-        });
-        if (conn.open) updateConnectionUI(true);
-    }
-
-    function sendChatMessage(text) {
-        if (!currentConn || !connectionOpen) { addMessage("Not connected.", true); return; }
-        currentConn.send(JSON.stringify({ type: 'chat', text }));
-        addMessage(text, true);
-    }
-
-    async function sendMultipleFiles(files) {
-        if (!currentConn || !connectionOpen) { alert("No active connection"); return; }
-        if (!files.length) return;
-        const CHUNK_SIZE = 16384; // 16KB chunks for reliability
-        for (const file of files) {
-            const fileId = Math.floor(Math.random() * 0xFFFFFFFF);
-            const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-            const meta = {
-                type: 'file_meta',
-                fileId: fileId,
-                name: file.name,
-                size: file.size,
-                totalChunks: totalChunks,
-                mimeType: file.type
-            };
-            currentConn.send(JSON.stringify(meta));
-            addMessage(`📤 Sending "${file.name}" (${(file.size/1024).toFixed(1)} KB) ...`, true);
-            const buffer = await file.arrayBuffer();
-            for (let i = 0; i < totalChunks; i++) {
-                const start = i * CHUNK_SIZE;
-                const end = Math.min(start + CHUNK_SIZE, buffer.byteLength);
-                const chunkPayload = buffer.slice(start, end);
-                const header = new ArrayBuffer(8);
-                const headerView = new DataView(header);
-                headerView.setUint32(0, fileId, true);
-                headerView.setUint32(4, i, true);
-                const finalChunk = new Uint8Array(header.byteLength + chunkPayload.byteLength);
-                finalChunk.set(new Uint8Array(header), 0);
-                finalChunk.set(new Uint8Array(chunkPayload), 8);
-                currentConn.send(finalChunk.buffer);
-                // slight delay to avoid overwhelming the channel
-                await new Promise(r => setTimeout(r, 8));
-            }
-            addMessage(`✅ Sent "${file.name}" successfully.`, true);
-        }
-        alert(`Sent ${files.length} file(s)!`);
-        selectedFiles = [];
-        updateSelectedPreview();
-        fileInput.value = '';
-    }
-
-    function updateSelectedPreview() {
-        if (selectedFiles.length === 0) {
-            selectedFilesPreview.innerHTML = '<div style="color:#aaa;">No files selected</div>';
-            return;
-        }
-        selectedFilesPreview.innerHTML = selectedFiles.map(f => `<div class="chip">📎 ${f.name} (${(f.size/1024).toFixed(0)}KB)</div>`).join('');
-    }
-
-    function initPeer() {
-        myPeer = new Peer(undefined, {
-            host: '0.peerjs.com',
-            port: 443,
-            path: '/',
-            secure: true,
-            debug: 2
-        });
-        myPeer.on('open', (id) => {
-            myPeerId = id;
-            peerIdDisplay.innerText = id;
-            qrContainer.innerHTML = "";
-            new QRCode(qrContainer, {
-                text: id,
-                width: 180,
-                height: 180,
-                correctLevel: QRCode.CorrectLevel.M
-            });
-        });
-        myPeer.on('connection', (conn) => {
-            if (currentConn && currentConn.open) {
-                conn.close();
-                addMessage("Rejected incoming connection: already connected.", true);
-                return;
-            }
-            setupConnection(conn);
-            addMessage("📱 Incoming connection accepted.", true);
-        });
-        myPeer.on('error', (err) => {
-            console.error(err);
-            if (err.type === 'peer-unavailable') alert("Peer ID not reachable");
-        });
-    }
-
-    function connectToPeer(remoteId) {
-        if (!remoteId || remoteId === myPeerId) {
-            alert("Cannot connect to yourself");
-            return;
-        }
-        if (currentConn && currentConn.open) {
-            if (confirm("Already connected. Disconnect first?")) {
-                currentConn.close();
-                currentConn = null;
-                updateConnectionUI(false);
-            } else return;
-        }
-        const conn = myPeer.connect(remoteId, { reliable: true });
-        setupConnection(conn);
-        addMessage(`🔌 Connecting to ${remoteId.substring(0,8)}...`, true);
-    }
-
-    async function downloadAllAsZip() {
-        if (receivedFilesList.length === 0) { alert("No files to download"); return; }
-        const zip = new JSZip();
-        for (const file of receivedFilesList) {
-            zip.file(file.name, file.blob);
-        }
-        const content = await zip.generateAsync({ type: "blob" });
-        downloadBlob(content, "peerShare_files.zip");
-    }
-
-    // QR scanner
-    let scannerInstance = null;
-    async function startScanner() {
-        if (scannerInstance) await stopScanner();
-        scannerModal.classList.remove('hidden');
-        const readerElem = document.getElementById('qr-reader');
-        readerElem.innerHTML = "";
-        scannerInstance = new Html5Qrcode("qr-reader");
-        try {
-            await scannerInstance.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText) => {
-                    const peerIdScanned = decodedText.trim();
-                    stopScanner();
-                    scannerModal.classList.add('hidden');
-                    if (peerIdScanned && peerIdScanned !== myPeerId) {
-                        connectToPeer(peerIdScanned);
-                    } else if (peerIdScanned === myPeerId) {
-                        alert("That's your own QR code!");
-                    } else {
-                        alert("Invalid peer ID from QR");
-                    }
-                },
-                (error) => { /* ignore */ }
-            );
-        } catch(e) { console.error(e); alert("Camera error, check permissions"); }
-    }
-
-    async function stopScanner() {
-        if (scannerInstance && scannerInstance.isScanning) {
-            await scannerInstance.stop();
-            scannerInstance.clear();
-        }
-        scannerInstance = null;
-    }
-
-    // PWA helpers
-    function registerSW() {
+    <!-- Libraries -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="app.js"></script>
+    
+    <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(err => console.warn("SW registration failed", err));
+            navigator.serviceWorker.register('sw.js');
         }
-        const manifest = {
-            name: "PeerShare",
-            short_name: "PeerShare",
-            start_url: ".",
-            display: "standalone",
-            theme_color: "#1e88e5",
-            background_color: "#ffffff",
-            icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle fill='%231e88e5' cx='50' cy='50' r='45'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white'%3E📡%3C/text%3E%3C/svg%3E", sizes: "any", type: "image/svg+xml" }]
-        };
-        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(manifestBlob);
-        const link = document.createElement('link');
-        link.rel = 'manifest';
-        link.href = manifestURL;
-        document.head.appendChild(link);
-    }
-
-    function createServiceWorkerFile() {
-        const swCode = `self.addEventListener('fetch', event => { event.respondWith(fetch(event.request).catch(() => caches.match(event.request))); }); self.addEventListener('install', () => self.skipWaiting());`;
-        const blob = new Blob([swCode], {type: 'application/javascript'});
-        const url = URL.createObjectURL(blob);
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(url).catch(e=>console.log);
-        }
-    }
-
-    // Event binding
-    function bindEvents() {
-        sendChatBtn.onclick = () => {
-            const txt = chatInput.value.trim();
-            if (txt && connectionOpen) { sendChatMessage(txt); chatInput.value = ''; }
-            else if(!connectionOpen) alert("Not connected");
-        };
-        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendChatBtn.click(); });
-        fileInput.onchange = (e) => {
-            selectedFiles = Array.from(e.target.files);
-            updateSelectedPreview();
-        };
-        sendFilesBtn.onclick = () => {
-            if (!connectionOpen) alert("No peer connection");
-            else if (selectedFiles.length) sendMultipleFiles(selectedFiles);
-            else alert("Select files first");
-        };
-        disconnectBtn.onclick = () => {
-            if (currentConn) { currentConn.close(); updateConnectionUI(false); addMessage("You disconnected.", true); currentConn = null; }
-        };
-        openScannerBtn.onclick = () => { startScanner(); };
-        closeScannerBtn.onclick = () => { stopScanner(); scannerModal.classList.add('hidden'); };
-        connectManualBtn.onclick = () => { const rid = manualPeerIdInput.value.trim(); if(rid) connectToPeer(rid); else alert("Enter peer ID"); };
-        copyIdBtn.onclick = () => { if(myPeerId) { navigator.clipboard.writeText(myPeerId); alert("Copied!"); } };
-        downloadAllBtn.onclick = downloadAllAsZip;
-    }
-
-    function init() {
-        initPeer();
-        bindEvents();
-        registerSW();
-        createServiceWorkerFile();
-        window.addEventListener('beforeunload', () => {
-            if (currentConn) currentConn.close();
-            if (myPeer) myPeer.destroy();
-            if (scannerInstance) stopScanner();
-        });
-        updateConnectionUI(false);
-    }
-    init();
-</script>
+    </script>
 </body>
 </html>
+1
