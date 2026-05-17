@@ -1,10 +1,10 @@
 {
-"name":"PeerDrop Pro",
+"name":"PeerDrop Ultra",
 "short_name":"PeerDrop",
 "start_url":"./",
 "display":"standalone",
-"background_color":"#ffffff",
-"theme_color":"#1976d2",
+"background_color":"#eef2ff",
+"theme_color":"#2563eb",
 "icons":[
 {
 "src":"https://cdn-icons-png.flaticon.com/512/1041/1041916.png",
