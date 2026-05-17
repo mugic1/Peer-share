@@ -14,19 +14,26 @@
     </div>
 
     <div class="container">
-        <!-- Connection Section -->
         <div class="card connection-card">
             <h3>Connect via QR</h3>
             <div class="qr-section">
                 <div id="my-qr"></div>
-                <p>Tumhara ID: <strong id="my-id">Generating...</strong></p>
+                <p>Tumhara ID:</p>
+                <strong id="my-id">Generating...</strong>
             </div>
             <button class="btn" id="start-scan-btn">Scan QR Code</button>
             <div id="reader" style="display: none;"></div>
+            
+            <hr style="width: 100%;">
+            
+            <div class="manual-connect-area">
+                <input type="text" id="peer-id-input" placeholder="Friend ki ID yahan daalo...">
+                <button class="btn" id="connect-btn">Connect</button>
+            </div>
+            
             <p id="connection-status">Status: Disconnected</p>
         </div>
 
-        <!-- Chat & File Section (Hidden till connected) -->
         <div class="card chat-card" id="chat-section" style="display: none;">
             <div class="chat-box" id="chat-box"></div>
             
@@ -38,6 +45,7 @@
             <hr>
 
             <div class="file-area">
+                <label class="file-label">Select Files:</label>
                 <input type="file" id="file-input" multiple>
                 <button class="btn" id="send-file-btn">Send Files</button>
             </div>
@@ -45,15 +53,13 @@
             <div class="progress-area" id="progress-area"></div>
         </div>
 
-        <!-- Received Files Section -->
         <div class="card files-card" id="files-section" style="display: none;">
             <h3>Received Files</h3>
             <ul id="received-list"></ul>
-            <button class="btn btn-primary" id="download-all-btn">Download All (ZIP)</button>
+            <button class="btn" id="download-all-btn" style="width: 100%;">Download All (ZIP)</button>
         </div>
     </div>
 
-    <!-- Libraries -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -67,4 +73,3 @@
     </script>
 </body>
 </html>
-1
