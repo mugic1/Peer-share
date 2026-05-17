@@ -240,3 +240,22 @@ hr {
     height: auto !important;
     border-radius: 16px;
 }
+
+.manual-connect-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+}
+.manual-connect-area input {
+    width: 100%;
+}
+.manual-connect-area .btn {
+    width: 100%;
+}
+.file-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface-variant);
+}
