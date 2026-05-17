@@ -1,7 +1,27 @@
-self.addEventListener('install', (e) => {
-    console.log('[Service Worker] Install');
-});
-self.addEventListener('fetch', (e) => {
-    // Basic network-first strategy ya cache lagana chaho toh yahan add kar sakte ho.
+const CACHE = "peerdrop-pro-v1";
+
+const FILES = [
+"./",
+"./index.html",
+"./style.css",
+"./app.js",
+"./manifest.json"
+];
+
+self.addEventListener("install", e=>{
+
+e.waitUntil(
+caches.open(CACHE)
+.then(cache=>cache.addAll(FILES))
+);
+
 });
 
+self.addEventListener("fetch", e=>{
+
+e.respondWith(
+caches.match(e.request)
+.then(res=>res || fetch(e.request))
+);
+
+});
