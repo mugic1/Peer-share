@@ -216,3 +216,49 @@ hr {
         max-height: 40vh; /* Keyboard khulne par chat box zyada nahi dabega */
     }
 }
+/* 1. HTML5 QR Scanner ke container ko responsive aur visible banao */
+#reader {
+    width: 100% !important;
+    max-width: 350px;
+    margin: 10px auto;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 12px;
+}
+
+/* 2. Scanner ke andar ki video element ko fix karo */
+#reader video {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 8px;
+}
+
+/* 3. Mobile par keyboard khulne par scroll allow karne ke liye tweak */
+@media (max-width: 480px) {
+    body, html {
+        overflow-y: auto; /* hidden hata kar auto kiya */
+    }
+}
+/* 1. HTML5 QR Scanner ke container ko responsive aur visible banao */
+#reader {
+    width: 100% !important;
+    max-width: 350px;
+    margin: 10px auto;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 12px;
+}
+
+/* 2. Scanner ke andar ki video element ko fix karo */
+#reader video {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 8px;
+}
+
+/* 3. Mobile par keyboard khulne par scroll allow karne ke liye tweak */
+@media (max-width: 480px) {
+    body, html {
+        overflow-y: auto; /* hidden hata kar auto kiya */
+    }
+}
